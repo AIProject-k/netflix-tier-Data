@@ -1,0 +1,40 @@
+name: Update Netflix Top 10 data
+
+on:
+  schedule:
+    # Netflix refreshes the TSVs on Tuesdays (UTC). Run Wed 06:00 UTC to be safe.
+    - cron: "0 6 * * 3"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-data
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Build compact JSON from Netflix TSVs
+        run: python scripts/build_data.py
+
+      - name: Commit if data changed
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          if [ -z "$(git status --porcelain data/)" ]; then
+            echo "No data changes."
+            exit 0
+          fi
+          week=$(python -c "import json;print(json.load(open('data/latest/index.json'))['week'])")
+          git add data/
+          git commit -m "data: Netflix Top 10 week $week"
+          git push
