@@ -23,8 +23,14 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Build compact JSON from Netflix TSVs
+      - name: Build compact JSON from Netflix TSVs (app data)
         run: python scripts/build_data.py
+
+      - name: Accumulate weekly history (10 countries + global)
+        run: python scripts/build_history.py
+
+      - name: Compute N100 experimental TOP 100 (KR)
+        run: python scripts/build_n100.py
 
       - name: Commit if data changed
         run: |
