@@ -32,15 +32,18 @@ jobs:
       - name: Compute N100 experimental TOP 100 (KR)
         run: python scripts/build_n100.py
 
+      - name: Render the N100 web page
+        run: python scripts/build_web.py
+
       - name: Commit if data changed
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          if [ -z "$(git status --porcelain data/)" ]; then
+          if [ -z "$(git status --porcelain data/ web/)" ]; then
             echo "No data changes."
             exit 0
           fi
           week=$(python -c "import json;print(json.load(open('data/latest/index.json'))['week'])")
-          git add data/
+          git add data/ web/
           git commit -m "data: Netflix Top 10 week $week"
           git push

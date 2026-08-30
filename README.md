@@ -42,6 +42,12 @@ N100 = 0.40·순위점수 + 0.20·최신성 + 0.15·장기성 + 0.15·상승세 
 현재 26주 실측: KR 고유 작품 영화 124 / 시리즈 80 / 합계 204 →
 **ALL·영화는 100개 채워지고 시리즈는 80개까지**. 시즌 중복은 4건.
 
+## 웹 시각화
+
+`scripts/build_web.py` 가 `data/n100/kr.json` 을 자체 완결 HTML `web/n100.html` 로
+렌더한다. 안드로이드 앱과 같은 다크 팔레트·타이포. 행을 누르면 5요소(순위/최신/장기/
+상승/글로벌) 분해가 펼쳐진다. 파일을 그대로 브라우저에서 열거나 GitHub Pages 로 올리면 됨.
+
 ## 필수 레포 설정
 
 1. **이 레포는 Public** 이어야 한다 (private면 raw URL 401/404).
@@ -65,8 +71,10 @@ stdlib만 쓴다 (의존성 없음). `curl` 있으면 사용, 없으면 urllib �
 | `scripts/build_data.py` | TSV → 이번 주 앱 데이터 |
 | `scripts/build_history.py` | TSV → 전체 주차 이력 (10개국 + 글로벌) |
 | `scripts/build_n100.py` | 이력 → N100 TOP 100 |
+| `scripts/build_web.py` | `kr.json` → `web/n100.html` (자체 완결) |
 | `scripts/n100/` | `config.py` (상수) · `normalize.py` (작품 키) · `score.py` (공식) |
 | `docs/n100-score-v1.md` | 점수 공식 명세 |
 | `data/latest/` | 앱이 받는 대상 |
 | `data/history/` | 원본 주차 누적 (덮어쓰지 않음) |
 | `data/n100/kr.json` | N100 실험 랭킹 |
+| `web/n100.html` | N100 웹 시각화 |
